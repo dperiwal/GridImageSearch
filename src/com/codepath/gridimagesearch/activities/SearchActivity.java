@@ -18,6 +18,9 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.EditText;
 import android.widget.GridView;
+import android.widget.SearchView;
+import android.widget.SearchView.OnQueryTextListener;
+import android.widget.Toast;
 
 import com.codepath.gridimagesearch.R;
 import com.codepath.gridimagesearch.adapters.ImageResultsAdapter;
@@ -32,6 +35,7 @@ public class SearchActivity extends Activity {
 	static final int PAGE_SIZE = 8;
 	static final int REQUEST_CODE = 50;
 	static final String SEARCH_OPTION_KEY = "search_options";
+	static final String NETWORK_UNAVAILABLE_MSG = "Network not available. Aborting.";
 	
 	private EditText etQuery;
 	private GridView gvResults;
@@ -73,8 +77,12 @@ public class SearchActivity extends Activity {
 		});
 	}
 	
-	private void fetchAndLoadData(final int page) {
-		String query = etQuery.getText().toString();
+	private void fetchAndLoadData(String query, final int page) {
+		if (!Utils.isNetworkAvailable(this)) {
+			Log.i("INFO", NETWORK_UNAVAILABLE_MSG);
+			Toast.makeText(this, NETWORK_UNAVAILABLE_MSG, Toast.LENGTH_SHORT).show();
+			return;
+		}
 		AsyncHttpClient client = new AsyncHttpClient();
 		String searchURL = "https://ajax.googleapis.com/ajax/services/search/images?v=1.0&q=" + query + "&rsz=" + PAGE_SIZE;
 		searchURL = addSearchOptions(searchURL, page * PAGE_SIZE);
@@ -118,16 +126,21 @@ public class SearchActivity extends Activity {
 
 	// Fired whenever the Search button is pressed (android:onclick property)
 	public void onImageSearch(View v) {
+		startSearch(etQuery.getText().toString());		
+	}
+	
+	private void startSearch(final String query) {
 		// Attach a new ScrollListner every time a fresh query is started.
 		gvResults.setOnScrollListener(new EndlessScrollListener() {
-		    @Override
-		    public void onLoadMore(int page, int totalItemsCount) {
-	            // Triggered only when new data needs to be appended to the list
-	            // Add whatever code is needed to append new items to your AdapterView
-		        fetchAndLoadData(page); 
-		    }
-	    });
-		fetchAndLoadData(0);
+			@Override
+			public void onLoadMore(int page, int totalItemsCount) {
+				// Triggered only when new data needs to be appended to the list
+				// Add whatever code is needed to append new items to your
+				// AdapterView
+				fetchAndLoadData(query, page);
+			}
+		});
+		fetchAndLoadData(query, 0);
 	}
 
 	private String addSearchOptions(String searchURL, int page) {
@@ -157,6 +170,21 @@ public class SearchActivity extends Activity {
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
 		getMenuInflater().inflate(R.menu.search, menu);
+		MenuItem searchItem = menu.findItem(R.id.action_search);
+		SearchView searchView = (SearchView) searchItem.getActionView();
+		searchView.setOnQueryTextListener(new OnQueryTextListener() {
+			@Override
+			public boolean onQueryTextSubmit(String query) {
+				startSearch(query);
+				return true;
+			}
+
+			@Override
+			public boolean onQueryTextChange(String newText) {
+				return false;
+			}
+		});
+
 		return true;
 	}
 

@@ -1,5 +1,8 @@
 package com.codepath.gridimagesearch.utils;
 
+import android.content.Context;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 
@@ -18,5 +21,12 @@ public class Utils {
 			}
 		}
 		spinner.setSelection(index);
+	}
+	
+	static public Boolean isNetworkAvailable(Context context) {
+	    ConnectivityManager connectivityManager 
+	          = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+	    NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
+	    return activeNetworkInfo != null && activeNetworkInfo.isConnectedOrConnecting();
 	}
 }
