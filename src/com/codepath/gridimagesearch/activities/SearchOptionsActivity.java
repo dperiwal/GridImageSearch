@@ -14,6 +14,12 @@ import com.codepath.gridimagesearch.R;
 import com.codepath.gridimagesearch.models.SearchOptions;
 import com.codepath.gridimagesearch.utils.Utils;
 
+/**
+ * This activity gathers the options for subsequent image searches.
+ * 
+ * @author Damodar Periwal
+ *
+ */
 public class SearchOptionsActivity extends Activity {
 	private Spinner spImageSize;
 	private Spinner spColorFilter;

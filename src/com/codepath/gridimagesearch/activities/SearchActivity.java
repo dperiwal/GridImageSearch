@@ -31,6 +31,18 @@ import com.codepath.gridimagesearch.utils.Utils;
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.JsonHttpResponseHandler;
 
+/**
+ * This is the main activity to retrieve and show thumbnails of 
+ * filtered images in a scrollable grid view. 
+ * 
+ * The full view of an image is shown when the user taps on the
+ * thumbnail of that particular image.
+ * 
+ * The user can set options for the query through the Settings action item. 
+ * 
+ * @author Damodar Periwal
+ *
+ */
 public class SearchActivity extends Activity {
 	static final int PAGE_SIZE = 8;
 	static final int REQUEST_CODE = 50;
@@ -77,6 +89,13 @@ public class SearchActivity extends Activity {
 		});
 	}
 	
+	/**
+	 * Fetches the image data as per the query and search options (if any).
+	 * 
+	 * @param query The search terms
+	 * @param page The page number for the next set of images to be fetched.
+	 *             0 => the start of the query. 
+	 */
 	private void fetchAndLoadData(String query, final int page) {
 		if (!Utils.isNetworkAvailable(this)) {
 			Log.i("INFO", NETWORK_UNAVAILABLE_MSG);
@@ -143,6 +162,14 @@ public class SearchActivity extends Activity {
 		fetchAndLoadData(query, 0);
 	}
 
+	/**
+	 * Builds the final search url by appending query parameter string 
+	 * based on the search options and the current page number.
+	 * 
+	 * @param searchURL Base URL
+	 * @param page The page number for the next set of images to be fetched
+	 * @return
+	 */
 	private String addSearchOptions(String searchURL, int page) {
 		StringBuffer queryOptions = new StringBuffer();
 		if (!Utils.isNullOrEmpty(searchOptions.imageSize)) {
@@ -161,7 +188,7 @@ public class SearchActivity extends Activity {
 			queryOptions.append("&start=" + page);
 		}
 		
-		Log.i("INFO", "query options are: " + queryOptions.toString());
+		// Log.i("INFO", "query options are: " + queryOptions.toString());
 		
 		return (searchURL + queryOptions.toString());
 	}

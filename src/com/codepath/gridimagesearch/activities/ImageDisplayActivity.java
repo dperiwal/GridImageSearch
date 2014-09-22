@@ -13,6 +13,13 @@ import com.codepath.gridimagesearch.models.ImageResult;
 import com.codepath.gridimagesearch.utils.Utils;
 import com.squareup.picasso.Picasso;
 
+/**
+ * This Activity retrieves the URL of a full image from the passed ImageResult
+ * object, downloads the image, and then shows it.
+ * 
+ * @author Damodar Periwal
+ *
+ */
 public class ImageDisplayActivity extends Activity {
 
 	@Override
