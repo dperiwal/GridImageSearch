@@ -6,7 +6,9 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
 
@@ -25,6 +27,8 @@ public class SearchOptionsActivity extends Activity {
 	private Spinner spColorFilter;
 	private Spinner spImageType;
 	private EditText etSiteFilter;
+	private Button btnSaveOptions;
+	private Button btnCancelOptions;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -36,7 +40,7 @@ public class SearchOptionsActivity extends Activity {
 	private void setupResources() {
 	
 		// Collect the existing search options values passed in the intent.
-		SearchOptions currentSearchOptions = (SearchOptions) getIntent().getSerializableExtra(SearchActivity.SEARCH_OPTION_KEY);
+		SearchOptions currentSearchOptions = (SearchOptions) getIntent().getSerializableExtra(SearchActivity.SEARCH_OPTIONS_KEY);
 		// Image size
 		spImageSize = (Spinner) findViewById(R.id.spImageSize);
 		// Create an ArrayAdapter using the string array and a default spinner layout
@@ -73,6 +77,27 @@ public class SearchOptionsActivity extends Activity {
 		// Site filter
 		etSiteFilter = (EditText) findViewById(R.id.etSiteFilter);	
 		etSiteFilter.setText(currentSearchOptions.siteFilterUrl);
+		
+		// Save button
+		btnSaveOptions = (Button) findViewById(R.id.saveOptionsButton);
+		btnSaveOptions.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				saveSearchOptions(v);		
+			}
+		});
+		
+		// Cancel button
+		btnCancelOptions = (Button) findViewById(R.id.cancelOptionsButton);
+		btnCancelOptions.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				finish();;
+			}
+		});	
+		
 	}
 	
 	public void saveSearchOptions(View v) {
@@ -85,7 +110,7 @@ public class SearchOptionsActivity extends Activity {
 
 		// Return the latest search options back to the caller using the new SearchOption object
 		Intent i = new Intent();
-		i.putExtra(SearchActivity.SEARCH_OPTION_KEY, newSearchOptions);
+		i.putExtra(SearchActivity.SEARCH_OPTIONS_KEY, newSearchOptions);
 		setResult(RESULT_OK, i);
 		finish();
 	}

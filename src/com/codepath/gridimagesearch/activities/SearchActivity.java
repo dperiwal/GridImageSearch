@@ -10,6 +10,8 @@ import org.json.JSONObject;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.FragmentManager;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -24,6 +26,7 @@ import android.widget.Toast;
 
 import com.codepath.gridimagesearch.R;
 import com.codepath.gridimagesearch.adapters.ImageResultsAdapter;
+import com.codepath.gridimagesearch.fragments.SearchOptionsFragment;
 import com.codepath.gridimagesearch.models.ImageResult;
 import com.codepath.gridimagesearch.models.SearchOptions;
 import com.codepath.gridimagesearch.utils.EndlessScrollListener;
@@ -43,11 +46,11 @@ import com.loopj.android.http.JsonHttpResponseHandler;
  * @author Damodar Periwal
  *
  */
-public class SearchActivity extends Activity {
+public class SearchActivity extends /* Activity */ FragmentActivity implements GetNewSearchOptions {
 	static final int PAGE_SIZE = 8;
 	static final int REQUEST_CODE = 50;
-	static final String SEARCH_OPTION_KEY = "search_options";
-	static final String NETWORK_UNAVAILABLE_MSG = "Network not available. Aborting.";
+	static public final String SEARCH_OPTIONS_KEY = "search_options";
+	static public final String NETWORK_UNAVAILABLE_MSG = "Network not available. Aborting.";
 	
 	private EditText etQuery;
 	private GridView gvResults;
@@ -222,26 +225,40 @@ public class SearchActivity extends Activity {
 		// as you specify a parent activity in AndroidManifest.xml.
 		int id = item.getItemId();
 		if (id == R.id.action_settings) {
-			// Create an intent for settings activity
+/*			// Create an intent for settings activity
 			Intent i = new Intent(SearchActivity.this, SearchOptionsActivity.class);
 			// Pass image data in the intent
-			i.putExtra(SEARCH_OPTION_KEY, searchOptions);
+			i.putExtra(SEARCH_OPTIONS_KEY, searchOptions);
 			// Launch the new activity
-			startActivityForResult(i, REQUEST_CODE);
+			startActivityForResult(i, REQUEST_CODE);*/
+			
+			showSearchOptionsDialog();
+
 					
 			return true;
 		}
 		return super.onOptionsItemSelected(item);
 	}
 	
+	
+	private void showSearchOptionsDialog() {
+	  	FragmentManager fm = getSupportFragmentManager();
+	  	SearchOptionsFragment optionsDialog = SearchOptionsFragment.newInstance(searchOptions);
+	  	optionsDialog.show(fm, "fragment_search_options");
+	  }
+	
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		if (resultCode == RESULT_OK && requestCode == REQUEST_CODE) {
 			// Update the search options for subsequent queries
-			searchOptions = (SearchOptions) data
-					.getSerializableExtra(SEARCH_OPTION_KEY);
+			setNewSearchOptions((SearchOptions) data
+					.getSerializableExtra(SEARCH_OPTIONS_KEY));
 			// Log.i("INFO, return value", searchOptions.toString());
 		}
+	}
+	
+	public void setNewSearchOptions(SearchOptions newSearchOptions) {
+		searchOptions = newSearchOptions;
 	}
 
 }

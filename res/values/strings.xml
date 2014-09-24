@@ -18,5 +18,7 @@
     <string name="image_type_text">Image Type</string>
     <string name="site_filter_text">Site Filter</string>
     <string name="save_options_text">Save</string>
+    <string name="cancel_options_text">Cancel</string>
+    <string name="action_share">Share</string>
 
 </resources>

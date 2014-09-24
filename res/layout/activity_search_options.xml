@@ -3,6 +3,11 @@
     android:id="@+id/btnSaveOptions"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:paddingBottom="5dp"
+    android:paddingLeft="5dp"
+    android:paddingRight="5dp"
+    android:paddingTop="5dp"
+    android:background="@drawable/options_dialog_border"
     tools:context="com.codepath.gridimagesearch.activities.SearchOptionsActivity" >
 
     <TextView
@@ -12,8 +17,11 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentRight="true"
         android:layout_alignParentTop="true"
+        android:background="#CCFF99"
+        android:gravity="center_horizontal"
         android:text="@string/adv_search_options_text"
-        android:textSize="24sp" >
+        android:textSize="18sp" >
+
     </TextView>
 
     <TextView
@@ -101,13 +109,24 @@
         android:hint="@string/site_url_text" />
 
     <Button
-        android:id="@+id/button1"
+        android:id="@+id/saveOptionsButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tvSiteFilterLabel"
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="20dp"      
+        android:text="@string/save_options_text" />
+    
+     <Button
+        android:id="@+id/cancelOptionsButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/etSiteFilter"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="20dp"
-        android:text="@string/save_options_text" 
-        android:onClick="saveSearchOptions"/>
+        android:layout_toRightOf="@+id/saveOptionsButton"
+        android:layout_marginTop="20dp" 
+        android:layout_marginLeft="20dp"     
+        android:text="@string/cancel_options_text" />
+
+     
 
 </RelativeLayout>
